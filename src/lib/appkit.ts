@@ -3,8 +3,10 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { QueryClient } from '@tanstack/react-query'
 import { mainnet } from '@reown/appkit/networks'
 
+type AppKitNetwork = import('@reown/appkit-common').AppKitNetwork
+
 export const queryClient = new QueryClient()
-export const projectId = import.meta.env.REOWN_PROJECT_ID
+export const projectId = import.meta.env.REOWN_PROJECT_ID as string
 
 const metadata = {
   name: 'Crypto Portfolio DApp',
@@ -13,7 +15,7 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 }
 
-const networks = [mainnet];
+const networks: [AppKitNetwork, ...AppKitNetwork[]] = [mainnet];
 
 export const wagmiAdapter = new WagmiAdapter({
   networks,
