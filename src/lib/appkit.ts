@@ -31,6 +31,12 @@ createAppKit({
   features: {
     analytics: true,
   },
+  themeVariables: {
+    '--apkt-font-family': 'Roboto Flex, sans-serif',
+    '--apkt-accent': '#10b981', // cor de destaque
+    '--apkt-color-mix': '#10b981', // cor de fundo
+    '--apkt-border-radius-master': '12px', // bordas arredondadas
+  },
 })
 
 export const wagmiConfig = wagmiAdapter.wagmiConfig
