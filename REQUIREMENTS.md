@@ -47,7 +47,7 @@ O objetivo principal é fornecer uma ferramenta simples e eficiente para que usu
 - **Conexão de Wallet**:
   - wagmi (React Hooks para Ethereum) - recomendado
   - @web3-react/core como alternativa
-  - WalletConnect v2 para suporte a múltiplas wallets
+  - Reown AppKit para suporte a múltiplas wallets
 
 - **Provider de Blockchain**:
   - Infura ou Alchemy para RPC endpoints

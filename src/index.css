@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap');
+
+:root {
+    --wcm-accent-color: #3b82f6;
+    --wcm-background-color: #1e293b;
+    --wcm-border-radius: 12px;
+    --wcm-font-family: 'Roboto Flex', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Flex', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
