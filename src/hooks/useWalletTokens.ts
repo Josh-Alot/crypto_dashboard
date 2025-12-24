@@ -8,25 +8,20 @@ import { NATIVE_TOKEN_SYMBOLS, NATIVE_TOKEN_NAMES } from '../config/popularToken
 import type { Token } from '../types/token';
 import { useConfig } from 'wagmi';
 
-/**
- * Hook to fetch all tokens (native + ERC-20) for the connected wallet
- */
 export function useWalletTokens() {
   const { address, isConnected } = useConnection();
   const chainId = useChainId();
   const config = useConfig();
   const chain = config.chains.find((c) => c.id === chainId);
 
-  // Get native token balance
   const { data: nativeBalance, isLoading: isLoadingNative } = useBalance({
     address,
     query: {
       enabled: isConnected && !!address,
-      refetchInterval: 30000, // Refetch every 30 seconds
+      refetchInterval: 30000,
     },
   });
 
-  // Get ERC-20 tokens
   const {
     data: tokens,
     isLoading: isLoadingTokens,
@@ -41,47 +36,43 @@ export function useWalletTokens() {
 
       const allTokens: Token[] = [];
 
-      // 1. Add native token (always include if balance exists, even if 0)
       if (nativeBalance) {
         const nativeSymbol = NATIVE_TOKEN_SYMBOLS[chainId] || 'ETH';
         const nativeName = NATIVE_TOKEN_NAMES[chainId] || 'Ethereum';
         const nativeBalanceFormatted = parseFloat(formatUnits(nativeBalance.value, nativeBalance.decimals));
 
-        // Only add if balance > 0
+
         if (nativeBalance.value > 0n) {
           allTokens.push({
             symbol: nativeSymbol,
             name: nativeName,
             balance: nativeBalanceFormatted,
-            price: 0, // Will be updated below
-            value: 0, // Will be calculated below
+            price: 0,
+            value: 0,
             isNative: true,
             decimals: nativeBalance.decimals,
           });
         }
       }
 
-      // 2. Get token addresses from Explorer API (automated discovery)
       const normalizedOwnerAddress = getAddress(address);
       const tokenAddresses = await getTokenAddressesFromExplorer(normalizedOwnerAddress, chainId);
       
       if (tokenAddresses.length > 0) {
-        // Get balances for discovered tokens
         const erc20Tokens = await getMultipleERC20Balances(
           tokenAddresses,
           normalizedOwnerAddress,
           chain
         );
 
-        // Add ERC-20 tokens to the list
         for (const token of erc20Tokens) {
           const balanceFormatted = parseFloat(formatUnits(token.balance, token.decimals));
           allTokens.push({
             symbol: token.symbol,
             name: token.name,
             balance: balanceFormatted,
-            price: 0, // Will be updated below
-            value: 0, // Will be calculated below
+            price: 0,
+            value: 0,
             address: token.address,
             decimals: token.decimals,
             isNative: false,
@@ -89,11 +80,9 @@ export function useWalletTokens() {
         }
       }
 
-      // 3. Fetch prices for all tokens
       const symbols = allTokens.map((t) => t.symbol);
       const prices = await getTokenPrices(symbols, chainId);
 
-      // 4. Update tokens with prices and calculate values
       return allTokens.map((token) => {
         const price = prices[token.symbol.toUpperCase()] || 0;
         const value = price * token.balance;
@@ -106,8 +95,8 @@ export function useWalletTokens() {
       });
     },
     enabled: isConnected && !!address && !!chain && !isLoadingNative,
-    refetchInterval: 60000, // Refetch every minute
-    staleTime: 30000, // Consider data stale after 30 seconds
+    refetchInterval: 60000,
+    staleTime: 30000,
   });
 
   return {
