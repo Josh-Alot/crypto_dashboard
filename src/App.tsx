@@ -2,9 +2,12 @@ import { useConnection } from 'wagmi'
 import Header from './components/Header'
 import WalletButton from './components/WalletButton'
 import TokensTable from './components/TokensTable'
+import PortfolioTotal from './components/PortfolioTotal'
+import { useWalletTokens } from './hooks/useWalletTokens'
 
 function App() {
   const { isConnected } = useConnection();
+  const { tokens, isLoading } = useWalletTokens();
 
   return (
     <div className="min-h-screen min-w-screen bg-slate-900 p-6 md:p-8">
@@ -22,6 +25,7 @@ function App() {
             </div>
           ) : (
             <div className="w-full">
+              <PortfolioTotal tokens={tokens} isLoading={isLoading} />
               <h2 className="text-3xl font-medium text-white mb-6">Your Assets</h2>
               <TokensTable />
             </div>
