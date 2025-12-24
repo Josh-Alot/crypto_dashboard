@@ -1,4 +1,79 @@
-# React + TypeScript + Vite
+# Crypto Portfolio DApp
+
+A decentralized application (DApp) for viewing and managing cryptocurrency portfolios. Connect your wallet to see all your tokens (native and ERC-20) across multiple EVM networks.
+
+## Features
+
+- 🔗 Connect multiple wallets (MetaMask, WalletConnect, Coinbase Wallet)
+- 💰 View all tokens (native + ERC-20) in your wallet
+- 📊 Real-time price updates via CoinGecko API
+- 🔍 Automated token discovery via Blockchain Explorer APIs
+- 🌐 Multi-chain support (Ethereum, Base, Polygon, Arbitrum, Optimism)
+
+## Setup
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Reown/WalletConnect Project ID (required)
+VITE_REOWN_PROJECT_ID=your_project_id_here
+
+# Blockchain Explorer API Keys (optional but recommended)
+# Get free API keys from:
+# - Etherscan: https://etherscan.io/apis
+# - Basescan: https://basescan.org/apis
+# - Polygonscan: https://polygonscan.com/apis
+# - Arbiscan: https://arbiscan.io/apis
+# - Optimistic Etherscan: https://optimistic.etherscan.io/apis
+
+VITE_ETHERSCAN_API_KEY=your_etherscan_api_key_here
+VITE_BASESCAN_API_KEY=your_basescan_api_key_here
+VITE_POLYGONSCAN_API_KEY=your_polygonscan_api_key_here
+VITE_ARBISCAN_API_KEY=your_arbiscan_api_key_here
+VITE_OPTIMISTIC_ETHERSCAN_API_KEY=your_optimistic_etherscan_api_key_here
+```
+
+**Note:** The Explorer API keys are optional. Without them, the app will still work but may have rate limits. With API keys, you get:
+- Higher rate limits
+- More reliable token discovery
+- Better performance
+
+### 3. Run Development Server
+
+```bash
+npm run dev
+```
+
+## How Token Discovery Works
+
+The app uses **Blockchain Explorer APIs** to automatically discover all tokens in your wallet:
+
+1. **Explorer API**: Queries the blockchain explorer (Etherscan, Basescan, etc.) to find all token transfers associated with your wallet address
+2. **Token Information**: Fetches token metadata (name, symbol, decimals) directly from the blockchain
+3. **Balance Check**: Verifies current token balances
+4. **Price Fetching**: Gets real-time prices from CoinGecko API
+
+This approach is more automated than maintaining a hardcoded list of tokens and will discover any token your wallet has interacted with.
+
+## Tech Stack
+
+- **React** + **TypeScript** + **Vite**
+- **wagmi** + **viem** for Web3 interactions
+- **Reown AppKit** for wallet connections
+- **TanStack Query** for data fetching and caching
+- **Tailwind CSS** for styling
+
+---
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
