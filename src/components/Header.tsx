@@ -9,7 +9,7 @@ function Header() {
 
     return (
         <header 
-            className="flex flex-row items-center justify-between w-screen bg-slate-900 border border-slate-800 rounded-xl shadow-sm"
+            className="flex flex-row items-center justify-between w-full bg-slate-900 border border-slate-800 rounded-xl shadow-sm"
             style={{ paddingTop: '2rem', paddingBottom: '2rem', paddingLeft: '1.3rem', paddingRight: '1.3rem' }}
         >   
             <HeaderLogo />
