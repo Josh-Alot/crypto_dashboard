@@ -66,51 +66,6 @@ export interface CoinGeckoPriceResponse {
 }
 
 /**
- * Get token price from CoinGecko by symbol
- */
-export async function getTokenPrice(symbol: string, chainId?: number): Promise<number | null> {
-  try {
-    // For native tokens, use chain-specific ID
-    if (chainId && NATIVE_TOKEN_IDS[chainId] && (symbol === 'ETH' || symbol === 'MATIC' || symbol === 'BNB' || symbol === 'AVAX')) {
-      const tokenId = NATIVE_TOKEN_IDS[chainId];
-      const response = await fetch(
-        `${COINGECKO_API_BASE}/simple/price?ids=${tokenId}&vs_currencies=usd`
-      );
-      
-      if (!response.ok) {
-        console.error(`CoinGecko API error: ${response.status}`);
-        return null;
-      }
-      
-      const data: CoinGeckoPriceResponse = await response.json();
-      return data[tokenId]?.usd ?? null;
-    }
-
-    // For ERC-20 tokens, try to find CoinGecko ID
-    const tokenId = TOKEN_ID_MAP[symbol.toUpperCase()];
-    if (!tokenId) {
-      console.warn(`Token ${symbol} not found in CoinGecko ID map`);
-      return null;
-    }
-
-    const response = await fetch(
-      `${COINGECKO_API_BASE}/simple/price?ids=${tokenId}&vs_currencies=usd`
-    );
-
-    if (!response.ok) {
-      console.error(`CoinGecko API error: ${response.status}`);
-      return null;
-    }
-
-    const data: CoinGeckoPriceResponse = await response.json();
-    return data[tokenId]?.usd ?? null;
-  } catch (error) {
-    console.error('Error fetching token price from CoinGecko:', error);
-    return null;
-  }
-}
-
-/**
  * Get multiple token prices in a single request
  */
 export async function getTokenPrices(symbols: string[], chainId?: number): Promise<Record<string, number>> {

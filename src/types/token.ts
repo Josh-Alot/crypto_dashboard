@@ -10,17 +10,3 @@ export type Token = {
   isNative?: boolean;
 }
 
-export type TokenBalance = {
-  address: string;
-  balance: bigint;
-  decimals: number;
-  symbol: string;
-  name: string;
-}
-
-export type TokenWithBalance = TokenBalance & {
-  price?: number;
-  value?: number;
-  logo?: string;
-}
-
