@@ -1,4 +1,4 @@
-import type { Token } from '../../mocks/tokens';
+import type { Token } from '../types/token';
 
 interface TokenRowProps {
   token: Token;
