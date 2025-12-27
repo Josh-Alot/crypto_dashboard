@@ -3,6 +3,7 @@ import Header from './components/Header'
 import WalletButton from './components/WalletButton'
 import TokensTable from './components/TokensTable'
 import PortfolioTotal from './components/PortfolioTotal'
+import RecentTransactions from './components/RecentTransactions'
 import { useWalletTokens } from './hooks/useWalletTokens'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
               <PortfolioTotal tokens={tokens} isLoading={isLoading} />
               <h2 className="text-3xl font-medium text-white mb-6">Your Assets</h2>
               <TokensTable />
+              <RecentTransactions />
             </div>
           )}
           
