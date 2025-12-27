@@ -11,7 +11,7 @@ export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID as string
 const metadata = {
   name: 'Crypto Portfolio DApp',
   description: 'Cryptocurrencies Portfolio Dashboard',
-  url: import.meta.env.PROJECT_URL,
+  url: import.meta.env.PROJECT_URL || 'https://crypto-dashboard.pages.dev',
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 }
 
