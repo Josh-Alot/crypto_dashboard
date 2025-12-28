@@ -13,8 +13,8 @@ if (typeof (globalThis as any).import === 'undefined') {
     value: {
       meta: {
         env: {
-          VITE_ETHERSCAN_API_KEY: 'test-api-key',
-          VITE_REOWN_PROJECT_ID: 'test-project-id',
+          ETHERSCAN_API_KEY: 'test-api-key',
+          REOWN_PROJECT_ID: 'test-project-id',
           PROJECT_URL: 'http://localhost:3000',
         },
       },

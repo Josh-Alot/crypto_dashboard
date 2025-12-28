@@ -24,7 +24,7 @@ Create a `.env` file in the root directory with the following variables:
 
 ```env
 # Reown/WalletConnect Project ID (required)
-VITE_REOWN_PROJECT_ID=your_project_id_here
+REOWN_PROJECT_ID=your_project_id_here
 
 # Blockchain Explorer API Keys (optional but recommended)
 # Get free API keys from:
@@ -34,11 +34,11 @@ VITE_REOWN_PROJECT_ID=your_project_id_here
 # - Arbiscan: https://arbiscan.io/apis
 # - Optimistic Etherscan: https://optimistic.etherscan.io/apis
 
-VITE_ETHERSCAN_API_KEY=your_etherscan_api_key_here
-VITE_BASESCAN_API_KEY=your_basescan_api_key_here
-VITE_POLYGONSCAN_API_KEY=your_polygonscan_api_key_here
-VITE_ARBISCAN_API_KEY=your_arbiscan_api_key_here
-VITE_OPTIMISTIC_ETHERSCAN_API_KEY=your_optimistic_etherscan_api_key_here
+ETHERSCAN_API_KEY=your_etherscan_api_key_here
+BASESCAN_API_KEY=your_basescan_api_key_here
+POLYGONSCAN_API_KEY=your_polygonscan_api_key_here
+ARBISCAN_API_KEY=your_arbiscan_api_key_here
+OPTIMISTIC_ETHERSCAN_API_KEY=your_optimistic_etherscan_api_key_here
 ```
 
 **Note:** The Explorer API keys are optional. Without them, the app will still work but may have rate limits. With API keys, you get:
@@ -70,6 +70,14 @@ This approach is more automated than maintaining a hardcoded list of tokens and 
 - **Reown AppKit** for wallet connections
 - **TanStack Query** for data fetching and caching
 - **Tailwind CSS** for styling
+
+## Deploy
+
+This project is configured for deployment on Cloudflare Pages.
+
+For detailed deployment instructions, see:
+- [DEPLOY.md](DEPLOY.md) - Complete deployment guide
+- [CLOUDFLARE_SETUP.md](CLOUDFLARE_SETUP.md) - Setup checklist
 
 ---
 

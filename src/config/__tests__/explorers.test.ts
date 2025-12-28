@@ -136,7 +136,7 @@ describe('explorers config', () => {
 
   describe('API Key configuration', () => {
     it('should allow apiKey to be set from environment variable', () => {
-      // The config uses import.meta.env.VITE_ETHERSCAN_API_KEY
+      // The config uses import.meta.env.ETHERSCAN_API_KEY
       // This test verifies the structure allows for API keys
       Object.values(EXPLORER_APIS).forEach((config: ExplorerConfig) => {
         // apiKey can be undefined (for public API) or a string
