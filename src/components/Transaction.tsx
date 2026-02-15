@@ -1,20 +1,28 @@
 import { formatUnits } from 'viem';
 import type { Transaction } from '../services/explorerApi';
 import { NATIVE_TOKEN_SYMBOLS } from '../config/popularTokens';
+import type { TokenTransfer } from '../services/explorerApi';
 
 interface TransactionRowProps {
-  tx: Transaction;
+  tx: Transaction | TokenTransfer;
   address: string;
   chainId: number;
   index: number;
 }
 
+function isTokenTransfer(tx: Transaction | TokenTransfer): tx is TokenTransfer {
+  return 'contractAddress' in tx && 'tokenSymbol' in tx && 'tokenDecimal' in tx;
+}
+
 function TransactionRow({ tx, address, chainId, index }: TransactionRowProps) {
+  const isToken = isTokenTransfer(tx);
   const isOutgoing = tx.from.toLowerCase() === address.toLowerCase();
-  const isError = tx.isError === '1' || tx.txreceipt_status === '0';
+  const isError = !isToken
+    ? (tx.isError === '1' || tx.txreceipt_status === '0')
+    : (tx.isError === '1' || tx.txreceipt_status === '0');
 
   const formatDate = (timestamp: string) => {
-    const date = new Date(parseInt(timestamp) * 1000);
+    const date = new Date(parseInt(timestamp, 10) * 1000);
     return new Intl.DateTimeFormat('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -24,11 +32,35 @@ function TransactionRow({ tx, address, chainId, index }: TransactionRowProps) {
     }).format(date);
   };
 
-  const formatValue = (value: string) => {
+  const formatEthValue = (value: string) => {
     const ethValue = parseFloat(formatUnits(BigInt(value), 18));
     if (ethValue === 0) return '0';
     if (ethValue < 0.0001) return '< 0.0001';
     return ethValue.toFixed(6);
+  };
+
+  const formatTokenValue = (value: string, decimals: string) => {
+    const d = parseInt(decimals, 10) || 18;
+    const num = parseFloat(formatUnits(BigInt(value), d));
+    if (num === 0) return '0';
+    if (num < 0.0001) return '< 0.0001';
+    if (num >= 1e6) return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    return num.toLocaleString(undefined, { maximumFractionDigits: 6, minimumFractionDigits: 0 });
+  };
+
+  const formatGas = (tx: Transaction | TokenTransfer): string => {
+    const gasUsed = 'gasUsed' in tx ? tx.gasUsed : undefined;
+    const gasPrice = 'gasPrice' in tx ? tx.gasPrice : undefined;
+    if (!gasUsed || !gasPrice) return '—';
+    try {
+      const gasCostWei = BigInt(gasUsed) * BigInt(gasPrice);
+      const eth = parseFloat(formatUnits(gasCostWei, 18));
+      if (eth === 0) return '0';
+      if (eth < 0.0001) return '< 0.0001';
+      return `${eth.toFixed(6)}`;
+    } catch {
+      return '—';
+    }
   };
 
   const truncateHash = (hash: string) => {
@@ -84,7 +116,12 @@ function TransactionRow({ tx, address, chainId, index }: TransactionRowProps) {
         </div>
       </td>
       <td className="text-right py-4 px-4 text-white font-mono text-sm">
-        {formatValue(tx.value)} {NATIVE_TOKEN_SYMBOLS[chainId]}
+        {isToken
+          ? `${formatTokenValue(tx.value, tx.tokenDecimal)} ${tx.tokenSymbol}`
+          : `${formatEthValue(tx.value)} ${NATIVE_TOKEN_SYMBOLS[chainId]}`}
+      </td>
+      <td className="text-right py-4 px-4 text-slate-400 font-mono text-sm" title={formatGas(tx) !== '—' ? `${formatGas(tx)} ${NATIVE_TOKEN_SYMBOLS[chainId]}` : undefined}>
+        {formatGas(tx) !== '—' ? `${formatGas(tx)} ${NATIVE_TOKEN_SYMBOLS[chainId]}` : '—'}
       </td>
       <td className="text-right py-4 px-4">
         <span
