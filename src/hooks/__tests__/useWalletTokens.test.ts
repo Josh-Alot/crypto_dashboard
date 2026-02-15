@@ -1,11 +1,11 @@
 // Mock explorers config before any imports
 jest.mock('../../config/explorers', () => ({
   EXPLORER_APIS: {
-    1: { baseUrl: 'https://api.etherscan.io/v2/api', apiKey: 'test', enabled: true, chainId: 1 },
-    8453: { baseUrl: 'https://api.etherscan.io/v2/api', apiKey: 'test', enabled: true, chainId: 8453 },
-    137: { baseUrl: 'https://api.etherscan.io/v2/api', apiKey: 'test', enabled: true, chainId: 137 },
-    42161: { baseUrl: 'https://api.etherscan.io/v2/api', apiKey: 'test', enabled: true, chainId: 42161 },
-    10: { baseUrl: 'https://api.etherscan.io/v2/api', apiKey: 'test', enabled: true, chainId: 10 },
+    1: { baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL, apiKey: 'test', enabled: true, chainId: 1 },
+    8453: { baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL, apiKey: 'test', enabled: true, chainId: 8453 },
+    137: { baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL, apiKey: 'test', enabled: true, chainId: 137 },
+    42161: { baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL, apiKey: 'test', enabled: true, chainId: 42161 },
+    10: { baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL, apiKey: 'test', enabled: true, chainId: 10 },
   },
 }));
 

@@ -1,31 +1,31 @@
 // Mock the explorers config to avoid import.meta.env issues - MUST be before any imports
 const mockExplorerAPIs = {
   1: {
-    baseUrl: 'https://api.etherscan.io/v2/api',
+    baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL,
     apiKey: 'test-api-key',
     enabled: true,
     chainId: 1,
   },
   8453: {
-    baseUrl: 'https://api.etherscan.io/v2/api',
+    baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL,
     apiKey: 'test-api-key',
     enabled: true,
     chainId: 8453,
   },
   137: {
-    baseUrl: 'https://api.etherscan.io/v2/api',
+    baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL,
     apiKey: 'test-api-key',
     enabled: true,
     chainId: 137,
   },
   42161: {
-    baseUrl: 'https://api.etherscan.io/v2/api',
+    baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL,
     apiKey: 'test-api-key',
     enabled: true,
     chainId: 42161,
   },
   10: {
-    baseUrl: 'https://api.etherscan.io/v2/api',
+    baseUrl: import.meta.env.ETHERSCAN_API_BASE_URL,
     apiKey: 'test-api-key',
     enabled: true,
     chainId: 10,
