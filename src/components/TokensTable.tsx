@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useWalletTokens } from '../hooks/useWalletTokens';
 import TokenRow from './TokenRow';
 
 function TokensTable() {
   const { tokens, isLoading, error } = useWalletTokens();
+  const [showZeroValueTokens, setShowZeroValueTokens] = useState(false);
 
   // TODO: setup a way to change currencies
   const formatCurrency = (value: number) => {
@@ -51,10 +53,29 @@ function TokensTable() {
     );
   }
 
-  const sortedTokens = [...tokens].sort((a, b) => (b.value || 0) - (a.value || 0));
+  const hasZeroValueTokens = tokens.some((token) => (token.value || 0) === 0);
+
+  const filteredTokens = showZeroValueTokens
+    ? tokens
+    : tokens.filter((token) => (token.value || 0) > 0);
+
+  const sortedTokens = [...filteredTokens].sort((a, b) => (b.value || 0) - (a.value || 0));
 
   return (
     <div className="w-full overflow-x-auto">
+      {hasZeroValueTokens && (
+        <div className="flex justify-end mb-4">
+          <label className="flex items-center gap-2 text-slate-400 text-sm cursor-pointer hover:text-slate-300">
+            <input
+              type="checkbox"
+              checked={showZeroValueTokens}
+              onChange={(e) => setShowZeroValueTokens(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-800"
+            />
+            Show possible scam tokens
+          </label>
+        </div>
+      )}
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-slate-700">
