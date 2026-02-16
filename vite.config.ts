@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 const exposedEnvVars = [
   'REOWN_PROJECT_ID',
   'ETHERSCAN_API_KEY',
+  'ETHERSCAN_API_BASE_URL',
   'BASESCAN_API_KEY',
   'POLYGONSCAN_API_KEY',
   'ARBISCAN_API_KEY',
