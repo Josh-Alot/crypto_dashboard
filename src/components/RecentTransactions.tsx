@@ -1,14 +1,22 @@
+import { useState } from 'react';
 import { useConnection, useChainId } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
 import { getWalletTokenTransactions, getWalletTransactions } from '../services/explorerApi';
 import type { Transaction, TokenTransfer } from '../services/explorerApi';
+import { useWalletTokens } from '../hooks/useWalletTokens';
 import TransactionRow from './Transaction';
 
 export type WalletActivity = Transaction | TokenTransfer;
 
+function isTokenTransfer(tx: Transaction | TokenTransfer): tx is TokenTransfer {
+  return 'contractAddress' in tx && 'tokenSymbol' in tx && 'tokenDecimal' in tx;
+}
+
 function RecentTransactions() {
   const { address, isConnected } = useConnection();
   const chainId = useChainId();
+  const { tokens } = useWalletTokens();
+  const [showZeroValueTokenTxs, setShowZeroValueTokenTxs] = useState(false);
 
   const {
     data: activities,
@@ -74,9 +82,39 @@ function RecentTransactions() {
     );
   }
 
+  const zeroValueTokenAddresses = new Set(
+    tokens
+      .filter((token) => (token.value || 0) === 0)
+      .map((token) => token.address?.toLowerCase())
+      .filter((address): address is string => !!address)
+  );
+
+  const hasZeroValueTokenTxs = activities.some(
+    (tx) => isTokenTransfer(tx) && zeroValueTokenAddresses.has(tx.contractAddress.toLowerCase())
+  );
+
+  const filteredActivities = showZeroValueTokenTxs
+    ? activities
+    : activities.filter(
+        (tx) => !isTokenTransfer(tx) || !zeroValueTokenAddresses.has(tx.contractAddress.toLowerCase())
+      );
+
   return (
     <div className="mt-8 mb-8 p-6 bg-slate-800/50 rounded-lg border border-slate-700">
-      <h2 className="text-2xl font-medium text-white mb-4">Last Transactions</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-medium text-white">Last Transactions</h2>
+        {hasZeroValueTokenTxs && (
+          <label className="flex items-center gap-2 text-slate-400 text-sm cursor-pointer hover:text-slate-300">
+            <input
+              type="checkbox"
+              checked={showZeroValueTokenTxs}
+              onChange={(e) => setShowZeroValueTokenTxs(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-800"
+            />
+            Show transactions from possible scam tokens
+          </label>
+        )}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -90,7 +128,7 @@ function RecentTransactions() {
             </tr>
           </thead>
           <tbody>
-            {activities.map((activity: WalletActivity, index: number) => (
+            {filteredActivities.map((activity: WalletActivity, index: number) => (
               <TransactionRow
                 key={'contractAddress' in activity
                   ? `${activity.hash}-${activity.contractAddress}-${activity.value}-${index}`
